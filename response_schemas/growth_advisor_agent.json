@@ -1,0 +1,28 @@
+{
+  "agent_name": "Growth Advisor Agent",
+  "agent_id": "6996c897fee7859ce82fcdb6",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_knowledge_base": true,
+  "rag_id": "6996c877e12ce168202cedc8",
+  "has_module_outputs": false,
+  "schema": {
+    "answer": "string - The main structured response with insights, tactics, and perspectives",
+    "perspectives": "array of objects - Each with guest_name (string), episode_title (string), company (string), insight (string)",
+    "topics": "array of strings - Growth topics covered",
+    "follow_up_questions": "array of strings - Suggested follow-up questions"
+  },
+  "sample_response": {
+    "answer": "Here are the key insights on PLG onboarding...",
+    "perspectives": [
+      {
+        "guest_name": "Elena Verna",
+        "episode_title": "The Ultimate Guide to PLG",
+        "company": "Amplitude",
+        "insight": "Focus on time-to-value, not feature completeness..."
+      }
+    ],
+    "topics": ["activation", "PLG"],
+    "follow_up_questions": ["How do top companies measure activation?", "What are common PLG pitfalls?"]
+  }
+}

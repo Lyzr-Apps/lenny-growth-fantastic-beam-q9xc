@@ -1,0 +1,42 @@
+{
+  "agent_name": "Growth Advisor Agent",
+  "agent_id": "6996c897fee7859ce82fcdb6",
+  "description": "Answers product growth questions by searching Lenny's Podcast transcripts. Covers acquisition, activation, retention, monetization, PLG, and GTM. Presents differing perspectives separately and always cites guest name, episode title, and company. Provides a mix of strategic insights and tactical execution ideas.",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "answer": "string",
+    "perspectives": [
+      {
+        "guest_name": "string",
+        "episode_title": "string",
+        "company": "string",
+        "insight": "string"
+      }
+    ],
+    "topics": [
+      "string"
+    ],
+    "follow_up_questions": [
+      "string"
+    ]
+  },
+  "example_response": {
+    "answer": "The main structured response with insights, tactics, and perspectives",
+    "perspectives": [
+      {
+        "guest_name": "Name of the podcast guest",
+        "episode_title": "Title of the episode",
+        "company": "Company or organization the guest represents",
+        "insight": "The key insight or perspective from this guest"
+      }
+    ],
+    "topics": [
+      "sample string"
+    ],
+    "follow_up_questions": [
+      "sample string"
+    ]
+  }
+}

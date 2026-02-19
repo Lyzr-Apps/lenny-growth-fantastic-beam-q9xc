@@ -1,0 +1,13 @@
+{
+  "agents": {
+    "growth_advisor_agent": {
+      "agent_id": "6996c897fee7859ce82fcdb6",
+      "name": "Growth Advisor Agent",
+      "has_knowledge_base": true,
+      "rag_id": "6996c877e12ce168202cedc8",
+      "rag_name": "lennyspodcasttranscripts13y2",
+      "provider": "google",
+      "model": "gemini-2.5-pro"
+    }
+  }
+}
