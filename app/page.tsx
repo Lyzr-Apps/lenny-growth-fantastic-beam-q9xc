@@ -5,7 +5,7 @@ import { callAIAgent } from '@/lib/aiAgent'
 import { uploadAndTrainDocument, getDocuments, deleteDocuments } from '@/lib/ragKnowledgeBase'
 import { useLyzrAgentEvents } from '@/lib/lyzrAgentEvents'
 import { FiSend, FiPlus, FiMessageSquare, FiUser, FiMenu, FiX, FiUpload, FiFile, FiTrash2, FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import AgentActivityPanel from '@/components/AgentActivityPanel'
+import { AgentActivityPanel } from '@/components/AgentActivityPanel'
 
 // --- Constants ---
 const AGENT_ID = '6996c897fee7859ce82fcdb6'
