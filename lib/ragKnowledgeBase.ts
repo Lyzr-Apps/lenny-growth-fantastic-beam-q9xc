@@ -8,6 +8,22 @@
 
 import { useState } from 'react'
 
+/**
+ * Safely parse a fetch Response as JSON.
+ * Handles HTML responses from redirects (e.g. sandbox paused).
+ */
+async function safeJsonParse(response: Response): Promise<{ ok: true; data: any } | { ok: false; error: string }> {
+  const text = await response.text()
+  try {
+    return { ok: true, data: JSON.parse(text) }
+  } catch {
+    if (text.trimStart().startsWith('<') || text.trimStart().startsWith('<!DOCTYPE')) {
+      return { ok: false, error: 'The service is temporarily unavailable. Please try again in a moment.' }
+    }
+    return { ok: false, error: `Unexpected response from server (status ${response.status})` }
+  }
+}
+
 // Supported file types
 export const SUPPORTED_FILE_TYPES = [
   'application/pdf',
@@ -82,8 +98,11 @@ export async function getDocuments(ragId: string): Promise<GetDocumentsResponse>
       body: JSON.stringify({ ragId }),
     })
 
-    const data = await response.json()
-    return data
+    const parsed = await safeJsonParse(response)
+    if (!parsed.ok) {
+      return { success: false, error: parsed.error }
+    }
+    return parsed.data
   } catch (error) {
     return {
       success: false,
@@ -114,8 +133,11 @@ export async function uploadAndTrainDocument(ragId: string, file: File): Promise
       body: formData,
     })
 
-    const data = await response.json()
-    return data
+    const parsed = await safeJsonParse(response)
+    if (!parsed.ok) {
+      return { success: false, error: parsed.error }
+    }
+    return parsed.data
   } catch (error) {
     return {
       success: false,
@@ -140,8 +162,11 @@ export async function deleteDocuments(
       body: JSON.stringify({ ragId, documentNames }),
     })
 
-    const data = await response.json()
-    return data
+    const parsed = await safeJsonParse(response)
+    if (!parsed.ok) {
+      return { success: false, error: parsed.error }
+    }
+    return parsed.data
   } catch (error) {
     return {
       success: false,
@@ -163,8 +188,11 @@ export async function crawlWebsite(ragId: string, url: string): Promise<CrawlRes
       body: JSON.stringify({ ragId, url }),
     })
 
-    const data = await response.json()
-    return data
+    const parsed = await safeJsonParse(response)
+    if (!parsed.ok) {
+      return { success: false, error: parsed.error }
+    }
+    return parsed.data
   } catch (error) {
     return {
       success: false,

@@ -19,6 +19,25 @@
 
 import { useState } from 'react'
 
+/**
+ * Safely parse a fetch Response as JSON.
+ * When the sandbox is paused or a redirect occurs, the response may be HTML
+ * (e.g. "<!DOCTYPE ...") which causes response.json() to throw.
+ * This helper detects that and returns a structured error instead.
+ */
+async function safeJsonParse(response: Response): Promise<{ ok: true; data: any } | { ok: false; error: string }> {
+  const text = await response.text()
+  try {
+    return { ok: true, data: JSON.parse(text) }
+  } catch {
+    // HTML redirect / non-JSON body
+    if (text.trimStart().startsWith('<') || text.trimStart().startsWith('<!DOCTYPE')) {
+      return { ok: false, error: 'The service is temporarily unavailable. Please try again in a moment.' }
+    }
+    return { ok: false, error: `Unexpected response from server (status ${response.status})` }
+  }
+}
+
 // Types
 export interface NormalizedAgentResponse {
   status: 'success' | 'error'
@@ -97,8 +116,19 @@ export async function callAIAgent(
       }),
     })
 
-    const data = await response.json()
-    return data
+    const parsed = await safeJsonParse(response)
+    if (!parsed.ok) {
+      return {
+        success: false,
+        response: {
+          status: 'error',
+          result: {},
+          message: parsed.error,
+        },
+        error: parsed.error,
+      }
+    }
+    return parsed.data
   } catch (error) {
     return {
       success: false,
@@ -143,8 +173,21 @@ export async function uploadFiles(files: File | File[]): Promise<UploadResponse>
       body: formData,
     })
 
-    const data = await response.json()
-    return data
+    const parsed = await safeJsonParse(response)
+    if (!parsed.ok) {
+      return {
+        success: false,
+        asset_ids: [],
+        files: [],
+        total_files: fileArray.length,
+        successful_uploads: 0,
+        failed_uploads: fileArray.length,
+        message: parsed.error,
+        timestamp: new Date().toISOString(),
+        error: parsed.error,
+      }
+    }
+    return parsed.data
   } catch (error) {
     return {
       success: false,
